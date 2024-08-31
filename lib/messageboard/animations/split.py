@@ -9,7 +9,7 @@ from . import Animation
 
 
 class Split(Animation):
-    def out_horizontally(self, message, duration=0.5):
+    async def out_horizontally(self, message, duration=0.5):
         """Show the effect of a message splitting horizontally
         over a certain period of time.
 
@@ -56,9 +56,9 @@ class Split(Animation):
                 message.opacity,
                 post_draw_position=(current_x - self._display.width // 2, current_y),
             )
-            self._wait(start_time, duration / distance)
+            await self._wait(start_time, duration / distance)
 
-    def out_vertically(self, message, duration=0.5):
+    async def out_vertically(self, message, duration=0.5):
         """Show the effect of a message splitting vertically
         over a certain period of time.
 
@@ -109,9 +109,9 @@ class Split(Animation):
                 message.opacity,
                 post_draw_position=(current_x, current_y - self._display.height // 2),
             )
-            self._wait(start_time, duration / distance)
+            await self._wait(start_time, duration / distance)
 
-    def in_horizontally(self, message, duration=0.5):
+    async def in_horizontally(self, message, duration=0.5):
         """Show the effect of a split message joining horizontally
         over a certain period of time.
 
@@ -161,9 +161,9 @@ class Split(Animation):
                 message.opacity,
                 post_draw_position=(current_x, current_y),
             )
-            self._wait(start_time, duration / distance)
+            await self._wait(start_time, duration / distance)
 
-    def in_vertically(self, message, duration=0.5):
+    async def in_vertically(self, message, duration=0.5):
         """Show the effect of a split message joining vertically
         over a certain period of time.
 
@@ -219,4 +219,4 @@ class Split(Animation):
                 message.opacity,
                 post_draw_position=(current_x, current_y),
             )
-            self._wait(start_time, duration / distance)
+            await self._wait(start_time, duration / distance)

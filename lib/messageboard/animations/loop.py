@@ -25,7 +25,7 @@ class Loop(Animation):
 
         return loop_image
 
-    def left(self, message, duration=1, count=1):
+    async def left(self, message, duration=1, count=1):
         """Loop a message towards the left side of the display over a certain period of time by a
         certain number of times. The message will re-enter from the right and end up back a the
         starting position.
@@ -53,9 +53,9 @@ class Loop(Animation):
                     current_y,
                     message.opacity,
                 )
-                self._wait(start_time, duration / distance / count)
+                await self._wait(start_time, duration / distance / count)
 
-    def right(self, message, duration=1, count=1):
+    async def right(self, message, duration=1, count=1):
         """Loop a message towards the right side of the display over a certain period of time by a
         certain number of times. The message will re-enter from the left and end up back a the
         starting position.
@@ -83,9 +83,9 @@ class Loop(Animation):
                     current_y,
                     message.opacity,
                 )
-                self._wait(start_time, duration / distance / count)
+                await self._wait(start_time, duration / distance / count)
 
-    def up(self, message, duration=0.5, count=1):
+    async def up(self, message, duration=0.5, count=1):
         """Loop a message towards the top side of the display over a certain period of time by a
         certain number of times. The message will re-enter from the bottom and end up back a the
         starting position.
@@ -113,9 +113,9 @@ class Loop(Animation):
                     current_y,
                     message.opacity,
                 )
-                self._wait(start_time, duration / distance / count)
+                await self._wait(start_time, duration / distance / count)
 
-    def down(self, message, duration=0.5, count=1):
+    async def down(self, message, duration=0.5, count=1):
         """Loop a message towards the bottom side of the display over a certain period of time by a
         certain number of times. The message will re-enter from the top and end up back a the
         starting position.
@@ -143,4 +143,4 @@ class Loop(Animation):
                     current_y,
                     message.opacity,
                 )
-                self._wait(start_time, duration / distance / count)
+                await self._wait(start_time, duration / distance / count)

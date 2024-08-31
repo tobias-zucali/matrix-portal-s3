@@ -29,3 +29,18 @@ git restore .
 
 <https://github.com/adafruit/circuitpython-fonts>
 <https://github.com/adafruit/Adafruit_Learning_System_Guides>
+
+## Manage Libraries
+
+<https://pypi.org/project/circup/>
+
+``` bash
+# global install
+pip3 install circup
+
+# show devices
+circup list
+
+# update
+circup update
+```

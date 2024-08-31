@@ -7,7 +7,7 @@ from . import Animation
 
 
 class Scroll(Animation):
-    def scroll_from_to(self, message, duration, start_x, start_y, end_x, end_y):
+    async def scroll_from_to(self, message, duration, start_x, start_y, end_x, end_y):
         """
         Scroll the message from one position to another over a certain period of
         time.
@@ -31,9 +31,9 @@ class Scroll(Animation):
             current_y = start_y + round(i * increment_y)
             self._draw(message, current_x, current_y)
             if i <= steps:
-                self._wait(start_time, duration / steps)
+                await self._wait(start_time, duration / steps)
 
-    def out_to_left(self, message, duration=1):
+    async def out_to_left(self, message, duration=1):
         """Scroll a message off the display from its current position towards the left
         over a certain period of time.
 
@@ -43,11 +43,11 @@ class Scroll(Animation):
         :type message: Message
         """
         current_x, current_y = self._position
-        self.scroll_from_to(
+        await self.scroll_from_to(
             message, duration, current_x, current_y, 0 - message.buffer.width, current_y
         )
 
-    def in_from_left(self, message, duration=1, x=0):
+    async def in_from_left(self, message, duration=1, x=0):
         """Scroll a message in from the left side of the display over a certain period of
         time. The final position is centered.
 
@@ -58,7 +58,7 @@ class Scroll(Animation):
         :type message: Message
         """
         center_x, center_y = self._get_centered_position(message)
-        self.scroll_from_to(
+        await self.scroll_from_to(
             message,
             duration,
             0 - message.buffer.width,
@@ -67,7 +67,7 @@ class Scroll(Animation):
             center_y,
         )
 
-    def in_from_right(self, message, duration=1, x=0):
+    async def in_from_right(self, message, duration=1, x=0):
         """Scroll a message in from the right side of the display over a certain period of
         time. The final position is centered.
 
@@ -78,11 +78,11 @@ class Scroll(Animation):
         :type message: Message
         """
         center_x, center_y = self._get_centered_position(message)
-        self.scroll_from_to(
+        await self.scroll_from_to(
             message, duration, self._display.width - 1, center_y, center_x + x, center_y
         )
 
-    def in_from_top(self, message, duration=1, y=0):
+    async def in_from_top(self, message, duration=1, y=0):
         """Scroll a message in from the top side of the display over a certain period of
         time. The final position is centered.
 
@@ -93,7 +93,7 @@ class Scroll(Animation):
         :type message: Message
         """
         center_x, center_y = self._get_centered_position(message)
-        self.scroll_from_to(
+        await self.scroll_from_to(
             message,
             duration,
             center_x,
@@ -102,7 +102,7 @@ class Scroll(Animation):
             center_y + y,
         )
 
-    def in_from_bottom(self, message, duration=1, y=0):
+    async def in_from_bottom(self, message, duration=1, y=0):
         """Scroll a message in from the bottom side of the display over a certain period of
         time. The final position is centered.
 
@@ -113,7 +113,7 @@ class Scroll(Animation):
         :type message: Message
         """
         center_x, center_y = self._get_centered_position(message)
-        self.scroll_from_to(
+        await self.scroll_from_to(
             message,
             duration,
             center_x,
@@ -122,7 +122,7 @@ class Scroll(Animation):
             center_y + y,
         )
 
-    def out_to_right(self, message, duration=1):
+    async def out_to_right(self, message, duration=1):
         """Scroll a message off the display from its current position towards the right
         over a certain period of time.
 
@@ -132,11 +132,11 @@ class Scroll(Animation):
         :type message: Message
         """
         current_x, current_y = self._position
-        self.scroll_from_to(
+        await self.scroll_from_to(
             message, duration, current_x, current_y, self._display.width - 1, current_y
         )
 
-    def out_to_top(self, message, duration=1):
+    async def out_to_top(self, message, duration=1):
         """Scroll a message off the display from its current position towards the top
         over a certain period of time.
 
@@ -146,7 +146,7 @@ class Scroll(Animation):
         :type message: Message
         """
         current_x, current_y = self._position
-        self.scroll_from_to(
+        await self.scroll_from_to(
             message,
             duration,
             current_x,
@@ -155,7 +155,7 @@ class Scroll(Animation):
             0 - message.buffer.height,
         )
 
-    def out_to_bottom(self, message, duration=1):
+    async def out_to_bottom(self, message, duration=1):
         """Scroll a message off the display from its current position towards the bottom
         over a certain period of time.
 
@@ -165,6 +165,6 @@ class Scroll(Animation):
         :type message: Message
         """
         current_x, current_y = self._position
-        self.scroll_from_to(
+        await self.scroll_from_to(
             message, duration, current_x, current_y, current_x, self._display.height - 1
         )

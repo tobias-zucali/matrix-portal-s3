@@ -7,7 +7,7 @@ from . import Animation
 
 
 class Static(Animation):
-    def show(self, message):
+    async def show(self, message):
         """Show the message at its current position.
 
         :param message: The message to show.
@@ -16,7 +16,7 @@ class Static(Animation):
         x, y = self._position
         self._draw(message, x, y)
 
-    def hide(self, message):
+    async def hide(self, message):
         """Hide the message at its current position.
 
         :param message: The message to hide.
@@ -25,7 +25,7 @@ class Static(Animation):
         x, y = self._position
         self._draw(message, x, y, opacity=0)
 
-    def blink(self, message, count=3, duration=1):
+    async def blink(self, message, count=3, duration=1):
         """Blink the foreground on and off a centain number of
         times over a certain period of time.
 
@@ -39,11 +39,11 @@ class Static(Animation):
         for _ in range(count):
             start_time = time.monotonic()
             self.hide(message)
-            start_time = self._wait(start_time, delay)
+            start_time = await self._wait(start_time, delay)
             self.show(message)
-            self._wait(start_time, delay)
+            await self._wait(start_time, delay)
 
-    def flash(self, message, count=3, duration=1):
+    async def flash(self, message, count=3, duration=1):
         """Fade the foreground in and out a centain number of
         times over a certain period of time.
 
@@ -59,7 +59,7 @@ class Static(Animation):
             self.fade_out(message, duration=delay, steps=steps)
             self.fade_in(message, duration=delay, steps=steps)
 
-    def fade_in(self, message, duration=1, steps=50):
+    async def fade_in(self, message, duration=1, steps=50):
         """Fade the foreground in over a certain period of time
         by a certain number of steps. More steps is smoother, but too high
         of a number may slow down the animation too much.
@@ -76,9 +76,9 @@ class Static(Animation):
         for opacity in range(steps + 1):
             start_time = time.monotonic()
             self._draw(message, current_x, current_y, opacity=opacity / steps)
-            self._wait(start_time, delay)
+            await self._wait(start_time, delay)
 
-    def fade_out(self, message, duration=1, steps=50):
+    async def fade_out(self, message, duration=1, steps=50):
         """Fade the foreground out over a certain period of time
         by a certain number of steps. More steps is smoother, but too high
         of a number may slow down the animation too much.
@@ -98,4 +98,4 @@ class Static(Animation):
                 self._position[1],
                 opacity=(steps - opacity) / steps,
             )
-            self._wait(start_time, delay)
+            await self._wait(start_time, delay)

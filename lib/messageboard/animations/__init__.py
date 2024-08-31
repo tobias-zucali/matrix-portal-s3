@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
+import asyncio
 import time
 
 
@@ -16,10 +17,12 @@ class Animation:
         self._draw = draw_callback
 
     @staticmethod
-    def _wait(start_time, duration):
+    async def _wait(start_time, duration):
         """Uses time.monotonic() to wait from the start time for a specified duration"""
+        await asyncio.sleep(0)
         while time.monotonic() < (start_time + duration):
-            pass
+            print("asyncio.sleep")
+            await asyncio.sleep(0)
         return time.monotonic()
 
     def _get_centered_position(self, message):
