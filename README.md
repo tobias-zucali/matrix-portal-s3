@@ -20,3 +20,12 @@ code /Volumes/CIRCUITPY
 git status
 git restore .
 ```
+
+## About the Device
+
+<https://learn.adafruit.com/adafruit-matrixportal-s3/>
+
+## Font Collections
+
+<https://github.com/adafruit/circuitpython-fonts>
+<https://github.com/adafruit/Adafruit_Learning_System_Guides>
