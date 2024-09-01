@@ -31,7 +31,8 @@ git restore .
 
 <https://github.com/adafruit/Adafruit_Learning_System_Guides>
 
-Convert your own: <https://learn.adafruit.com/custom-fonts-for-pyportal-circuitpython-display/use-otf2bdf>
+Convert your own: [OTF to BDF Converter](https://learn.adafruit.com/custom-fonts-for-pyportal-circuitpython-display/use-otf2bdf)
+[Web BDF to PCF Converter](https://adafruit.github.io/web-bdftopcf/)
 
 ## Manage Libraries
 
@@ -48,4 +49,4 @@ circup list
 circup update
 ```
 
-circup manages dependencies from [circuitpython-fonts](https://github.com/adafruit/circuitpython-fonts), [CircuitPython_Community_Bundle](https://github.com/adafruit/CircuitPython_Community_Bundle) and [Adafruit_CircuitPython_Bundle](https://github.com/adafruit/Adafruit_CircuitPython_Bundle)
+circup manages dependencies from [circuitpython-fonts](https://github.com/adafruit/circuitpython-fonts), [Adafruit_CircuitPython_Bundle](https://github.com/adafruit/Adafruit_CircuitPython_Bundle) and [CircuitPython_Community_Bundle](https://github.com/adafruit/CircuitPython_Community_Bundle)

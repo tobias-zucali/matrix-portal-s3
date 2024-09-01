@@ -5,7 +5,7 @@ from . import Animation
 
 
 class Reveal(Animation):
-    async def scroll_from_to(self, message, duration, start_x, start_y, end_x, end_y):
+    async def scroll_from_to(self, message, duration, start_x, start_y, end_x, end_y, step_size=1):
         """
         Scroll the message from one position to another over a certain period of
         time.
@@ -18,7 +18,7 @@ class Reveal(Animation):
         :param int end_y: The Ending Y Position
         :type message: Message
         """
-        steps = max(abs(end_x - start_x), abs(end_y - start_y))
+        steps = max(abs(end_x - start_x), abs(end_y - start_y)) / step_size
         if not steps:
             return
         increment_x = (end_x - start_x) / steps
@@ -63,7 +63,17 @@ class Reveal(Animation):
         for i in range(steps):
             current_width = (i + 1) * 4
             start_time = time.monotonic()
-            bitmaptools.blit(crop_image, image, 0, 0, x1=0, x2=current_width + 1, y1=0, y2=self._display.height)
+
+            bitmaptools.blit(
+                crop_image,
+                image,
+                0,
+                0,
+                x1=0,
+                x2=min(current_width, content_width),
+                y1=0,
+                y2=min(self._display.height, image.height),
+            )
             self._draw(
                 crop_image,
                 0,
@@ -82,5 +92,6 @@ class Reveal(Animation):
                 0,
                 0,
                 with_diff * -1,
-                0
+                0,
+                step_size=2,
             )
