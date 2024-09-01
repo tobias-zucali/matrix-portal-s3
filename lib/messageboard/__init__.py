@@ -5,11 +5,14 @@
 import bitmaptools
 import displayio
 import adafruit_imageload
+from messageboard.animations import AnimationCancelled
 from .doublebuffer import DoubleBuffer
 from .message import Message
 
 
 class MessageBoard:
+    _animation = None
+
     def __init__(self, matrix):
         self.fonts = {}
         self.display = matrix.display
@@ -45,6 +48,9 @@ class MessageBoard:
             raise RuntimeError("Unknown type of background")
 
     async def animate(self, message, animation_class, animation_function, **kwargs):
+        if self._animation:
+            self._animation.cancel()
+        
         anim_class = __import__(
             f"{self.__module__}.animations.{animation_class.lower()}"
         )
@@ -54,6 +60,8 @@ class MessageBoard:
         animation = anim_class(
             self.display, self._draw, self._position, (self._shift_count_x, self._shift_count_y)
         )  # Instantiate the class
+        self._animation = animation
+
         # Call the animation function and pass kwargs along with the message (positional)
         anim_func = getattr(animation, animation_function)
         await anim_func(message, **kwargs)

@@ -5,8 +5,13 @@
 import asyncio
 import time
 
+class AnimationCancelled(Exception):
+    pass
+
 
 class Animation:
+    _cancelled = False
+
     def __init__(self, display, draw_callback, starting_position=(0, 0), shift_count=(0, 0)):
         self._display = display
         starting_position = (
@@ -15,14 +20,18 @@ class Animation:
         )
         self._position = starting_position
         self._draw = draw_callback
+    
+    def cancel(self):
+        self._cancelled = True
 
-    @staticmethod
-    async def _wait(start_time, duration):
+    async def _wait(self, start_time, duration):
         """Uses time.monotonic() to wait from the start time for a specified duration"""
         await asyncio.sleep(0)
         while time.monotonic() < (start_time + duration):
             print("asyncio.sleep")
             await asyncio.sleep(0)
+        if self._cancelled:
+            raise AnimationCancelled()
         return time.monotonic()
 
     def _get_centered_position(self, message):
