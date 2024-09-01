@@ -49,9 +49,9 @@ async def animate_message(text="???"):
     while True:
         # Animate the message
         message = create_text_message(text)
-        await messageboard.animate(message, "Scroll", "in_from_right")
-        await asyncio.sleep(1)
-        await messageboard.animate(message, "Scroll", "out_to_left")
+        # await messageboard.animate(message, "Static", "show")
+        # await asyncio.sleep(1)
+        await messageboard.animate(message, "Static", "blink")
 
 # main coroutine
 next_text = "Hello World"

@@ -38,9 +38,9 @@ class Static(Animation):
         delay = duration / count / 2
         for _ in range(count):
             start_time = time.monotonic()
-            self.hide(message)
+            await self.hide(message)
             start_time = await self._wait(start_time, delay)
-            self.show(message)
+            await self.show(message)
             await self._wait(start_time, delay)
 
     async def flash(self, message, count=3, duration=1):
@@ -56,8 +56,8 @@ class Static(Animation):
         delay = duration / count / 2
         steps = 50 // count
         for _ in range(count):
-            self.fade_out(message, duration=delay, steps=steps)
-            self.fade_in(message, duration=delay, steps=steps)
+            await self.fade_out(message, duration=delay, steps=steps)
+            await self.fade_in(message, duration=delay, steps=steps)
 
     async def fade_in(self, message, duration=1, steps=50):
         """Fade the foreground in over a certain period of time

@@ -28,7 +28,6 @@ class Animation:
         """Uses time.monotonic() to wait from the start time for a specified duration"""
         await asyncio.sleep(0)
         while time.monotonic() < (start_time + duration):
-            print("asyncio.sleep")
             await asyncio.sleep(0)
         if self._cancelled:
             raise AnimationCancelled()
