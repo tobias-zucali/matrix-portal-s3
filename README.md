@@ -28,7 +28,10 @@ git restore .
 ## Font Collections
 
 <https://github.com/adafruit/circuitpython-fonts>
+
 <https://github.com/adafruit/Adafruit_Learning_System_Guides>
+
+Convert your own: <https://learn.adafruit.com/custom-fonts-for-pyportal-circuitpython-display/use-otf2bdf>
 
 ## Manage Libraries
 
@@ -44,3 +47,5 @@ circup list
 # update
 circup update
 ```
+
+circup manages dependencies from [circuitpython-fonts](https://github.com/adafruit/circuitpython-fonts), [CircuitPython_Community_Bundle](https://github.com/adafruit/CircuitPython_Community_Bundle) and [Adafruit_CircuitPython_Bundle](https://github.com/adafruit/Adafruit_CircuitPython_Bundle)
