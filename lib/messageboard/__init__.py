@@ -58,7 +58,7 @@ class MessageBoard:
         anim_class = getattr(anim_class, animation_class.lower())
         anim_class = getattr(anim_class, animation_class)
         animation = anim_class(
-            self.display, self._draw, self._position, (self._shift_count_x, self._shift_count_y)
+            self.display, self._draw, self.reset, self._position, (self._shift_count_x, self._shift_count_y)
         )  # Instantiate the class
         self._animation = animation
 
@@ -71,6 +71,9 @@ class MessageBoard:
         self._position = (x, y)
         self._shift_count_x = 0
         self._shift_count_y = 0
+    
+    def reset(self):
+        self.set_message_position(0, 0)
 
     def _draw(
         self,

@@ -1,6 +1,6 @@
 from adafruit_matrixportal.matrix import Matrix
 from adafruit_mcp230xx.mcp23017 import MCP23017
-from config.messages import BUTTONS, INTRO, TIMEOUT
+from config.messages import BUTTONS, INTRO, ERROR_TIMEOUT
 from digitalio import Direction, Pull
 from messageboard import MessageBoard
 from messageboard.animations import AnimationCancelled
@@ -105,19 +105,18 @@ async def show_button(button_definition):
     await reveal(message)
     await show(message, duration=2)
     await blink(message)
-    await slide_top(message)
     await check_timeouts(message, button_definition, start_time)
 
 async def check_timeouts(message, button_definition, start_time):
     intro_timeout = button_definition.get("intro_timeout", None)
-    timeout = button_definition.get("timeout", None)
-    if timeout is not None:
-        duration = max((start_time + timeout) - time.monotonic(), 0)
+    error_timeout = button_definition.get("error_timeout", None)
+    if error_timeout is not None:
+        duration = max((start_time + error_timeout) - time.monotonic(), 0)
         await show(
             message,
             duration=duration
         )
-        await main_show(TIMEOUT)
+        await main_show(ERROR_TIMEOUT)
     elif intro_timeout is not None:
         duration = max((start_time + intro_timeout) - time.monotonic(), 0)
         await show(
