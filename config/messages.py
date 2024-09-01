@@ -11,33 +11,39 @@ INTRO = {
 }
 
 TIMEOUT = {
+    "type": "alert",
+    "background": 0x110000,
     "text": [
         "time",
         "is",
         "over",
         "!",
     ],
+    "intro_timeout": 20,
 }
 
 BUTTONS = [
     {
-        "type": "start",
+        "type": "alert",
+        "background": 0x001100,
         "text": [
             "go!",
             "go!",
             "go!",
         ],
-        "timeout": 3,
+        "timeout": 20,
         "pin": 0, # A0
     },
     {
-        "type": "end",
+        "type": "alert",
+        "background": 0x001100,
         "text": [
             "hope",
             "lives",
             "on",
             "!",
         ],
+        "intro_timeout": 20,
         "pin": 1, # A1
     },
     {

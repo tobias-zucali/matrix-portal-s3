@@ -7,23 +7,27 @@ from . import Animation
 
 
 class Static(Animation):
-    async def show(self, message):
+    async def show(self, message, duration=0):
         """Show the message at its current position.
 
         :param message: The message to show.
         :type message: Message
         """
+        start_time = time.monotonic()
         x, y = self._position
         self._draw(message, x, y)
+        await self._wait(start_time, duration)
 
-    async def hide(self, message):
+    async def hide(self, message, duration=0):
         """Hide the message at its current position.
 
         :param message: The message to hide.
         :type message: Message
         """
+        start_time = time.monotonic()
         x, y = self._position
         self._draw(message, x, y, opacity=0)
+        await self._wait(start_time, duration)
 
     async def blink(self, message, count=3, duration=1):
         """Blink the foreground on and off a centain number of
