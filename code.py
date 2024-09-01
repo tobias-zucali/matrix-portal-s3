@@ -1,7 +1,3 @@
-# SPDX-FileCopyrightText: 2023 Melissa LeBlanc-Williams for Adafruit Industries
-#
-# SPDX-License-Identifier: MIT
-
 from adafruit_matrixportal.matrix import Matrix
 from digitalio import DigitalInOut, Direction, Pull
 from messageboard import MessageBoard
@@ -57,9 +53,9 @@ async def animate_message(text="???"):
     while True:
         # Animate the message
         message = create_text_message(text)
-        # await messageboard.animate(message, "Static", "show")
-        # await asyncio.sleep(1)
-        await messageboard.animate(message, "Static", "show")
+        await messageboard.animate(message, "Reveal", "in_from_left", step_size=4)
+        await asyncio.sleep(2)
+        await messageboard.animate(message, "Static", "blink")
 
 # main coroutine
 next_text = "mkrz"
