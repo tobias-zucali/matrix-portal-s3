@@ -1,12 +1,9 @@
 INTRO = {
     "lines": [
-        "#curtain_of_hope",
-        "1: write a postcard to a bright future",
-        "2: attach to the threads",
-        "3: post a photo of your card #curtain_of_hope",
-        "1: schreibe eine Postkarte an eine positive Zukunft",
-        "2: befestige deine Karte an den Fäden",
-        "3: poste ein foto der Karte #curtain_of_hope",
+        "#curtain_of_hope – make futures bright",
+        "1: write a narrative of hope on a postcard",
+        "2: place it into the #curtain_of_hope",
+        "3: post a photo on instagram #curtain_of_hope #arselectronica24",
     ]
 }
 
