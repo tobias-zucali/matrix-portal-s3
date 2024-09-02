@@ -1,5 +1,6 @@
 .vscode/settings.json
 .Trashes
-.fseventsd/fseventsd-uuid
+.fseventsd
+.TemporaryItems
 ._*
 settings.toml
