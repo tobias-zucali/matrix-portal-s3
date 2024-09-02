@@ -50,6 +50,7 @@ class MessageBoard:
     async def animate(self, message, animation_class, animation_function, **kwargs):
         if self._animation:
             self._animation.cancel()
+            self.set_message_position(0, 0)
         
         anim_class = __import__(
             f"{self.__module__}.animations.{animation_class.lower()}"
@@ -58,22 +59,20 @@ class MessageBoard:
         anim_class = getattr(anim_class, animation_class.lower())
         anim_class = getattr(anim_class, animation_class)
         animation = anim_class(
-            self.display, self._draw, self.reset, self._position, (self._shift_count_x, self._shift_count_y)
+            self.display, self._draw, self._position, (self._shift_count_x, self._shift_count_y)
         )  # Instantiate the class
         self._animation = animation
 
         # Call the animation function and pass kwargs along with the message (positional)
         anim_func = getattr(animation, animation_function)
         await anim_func(message, **kwargs)
+        self._animation = None
 
     def set_message_position(self, x, y):
         """Set the position of the message on the display"""
         self._position = (x, y)
         self._shift_count_x = 0
         self._shift_count_y = 0
-    
-    def reset(self):
-        self.set_message_position(0, 0)
 
     def _draw(
         self,
