@@ -91,7 +91,7 @@ class Reveal(Animation):
                 duration / self._display.width * with_diff,
                 0,
                 0,
-                with_diff * -1,
+                with_diff * -1 - 8, # 8 padding
                 0,
                 step_size=2,
             )
