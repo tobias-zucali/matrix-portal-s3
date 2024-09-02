@@ -157,3 +157,16 @@ BUTTONS = [
         "pin": 15, # B7
     },
 ]
+
+ERROR_IO_DETACHED = {
+    "type": "alert",
+    "background": 0x110000,
+    "text": [
+        "IO",
+        "not",
+        "connected",
+        "!",
+        "!",
+        "!",
+    ]
+}

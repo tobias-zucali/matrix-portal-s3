@@ -1,6 +1,6 @@
 from adafruit_matrixportal.matrix import Matrix
 from adafruit_mcp230xx.mcp23017 import MCP23017
-from config.messages import BUTTONS, INTRO, ERROR_TIMEOUT
+from config.messages import BUTTONS, ERROR_IO_DETACHED, INTRO, ERROR_TIMEOUT
 from digitalio import Direction, Pull
 from messageboard import MessageBoard
 from messageboard.animations import AnimationCancelled
@@ -31,17 +31,22 @@ font_small_thin = fontpool.find_font("font_small_thin")
 fontpool.add_font("font_x_small_thin", "fonts/Kanit-Thin-14.pcf")
 font_x_small_thin = fontpool.find_font("font_x_small_thin")
 
-# setup IO
-i2c = busio.I2C(board.SCL, board.SDA)
-mcp = MCP23017(i2c)
+io_connected = False
+try:
+    # setup IO
+    i2c = busio.I2C(board.SCL, board.SDA)
+    mcp = MCP23017(i2c)
 
-for button in BUTTONS:
-    button["io"] = mcp.get_pin(button["pin"])
-    button["io"].direction = Direction.INPUT
-    button["io"].pull = Pull.UP
-    button["value"] = button["io"].value
-    button["last_shown"] = 0
-    button["throttle"] = button.get("throttle", 1) # throttle executions 1 sec by default
+    for button in BUTTONS:
+        button["io"] = mcp.get_pin(button["pin"])
+        button["io"].direction = Direction.INPUT
+        button["io"].pull = Pull.UP
+        button["value"] = button["io"].value
+        button["last_shown"] = 0
+        button["throttle"] = button.get("throttle", 1) # throttle executions 1 sec by default
+    io_connected = True
+except ValueError:
+    pass
 
 def get_text_message(text):
     messageboard.set_background(0x000000)
@@ -151,6 +156,11 @@ def switch_button(button_definition):
 
 # main coroutine
 async def main():
+    if not io_connected:
+        await show_alert(ERROR_IO_DETACHED)
+        while True:
+            pass
+
     global next_button_definition
     asyncio.create_task(main_show(next_button_definition))
 
