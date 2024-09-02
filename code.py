@@ -22,12 +22,14 @@ fontpool.add_font("font_light", "fonts/Kanit-Light-24.pcf")
 font_light = fontpool.find_font("font_light")
 # fontpool.add_font("font_thin", "fonts/Kanit-Thin-24.pcf")
 # font_thin = fontpool.find_font("font_thin")
-# fontpool.add_font("font_small_bold", "fonts/Kanit-Regular-18.pcf")
-# font_small_bold = fontpool.find_font("font_small_bold")
 # fontpool.add_font("font_small_light", "fonts/Kanit-Light-18.pcf")
 # font_small_light = fontpool.find_font("font_lsmall_ight")
 fontpool.add_font("font_small_thin", "fonts/Kanit-Thin-18.pcf")
 font_small_thin = fontpool.find_font("font_small_thin")
+# fontpool.add_font("font_x_small_light", "fonts/Kanit-Light-14.pcf")
+# font_x_small_light = fontpool.find_font("font_lsmall_ight")
+fontpool.add_font("font_x_small_thin", "fonts/Kanit-Thin-14.pcf")
+font_x_small_thin = fontpool.find_font("font_x_small_thin")
 
 # setup IO
 i2c = busio.I2C(board.SCL, board.SDA)
@@ -43,8 +45,8 @@ for button in BUTTONS:
 
 def get_text_message(text):
     messageboard.set_background(0x000000)
-    message = Message(font_small_thin, mask_color=0xFF00FF, opacity=1)
-    message.add_text(text, color=0xFFFFFF, x_offset=4, y_offset=0)
+    message = Message(font_x_small_thin, mask_color=0xFF00FF, opacity=1)
+    message.add_text(text, color=0xFFFFFF, x_offset=4, y_offset=4)
     return message
 
 async def sleep_and_check(button_definition, duration, start_time=None):
