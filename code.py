@@ -101,12 +101,17 @@ async def show_alert(button_definition):
             await hide(message, duration=0.5)
     await check_timeouts(message, button_definition, start_time)
 
-async def show_button(button_definition):
+async def show_text(button_definition):
     start_time = time.monotonic()
-    message = get_text_message(button_definition["text"])
-    await reveal(message)
-    await show(message, duration=2)
-    await blink(message)
+
+    for i, line in enumerate(button_definition["text"]):
+        message = get_text_message(line)
+        if i == 0:
+            await blink(message)
+            await show(message, duration=2)
+        else:
+            await reveal(message)
+            await show(message, duration=1)
     await check_timeouts(message, button_definition, start_time)
 
 async def check_timeouts(message, button_definition, start_time):
@@ -135,7 +140,7 @@ async def main_show(button_definition):
         if type is "alert":
             await show_alert(button_definition)
         else:
-            await show_button(button_definition)
+            await show_text(button_definition)
 
 next_button_definition = None
 
