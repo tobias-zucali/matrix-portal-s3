@@ -23,21 +23,21 @@ font_light_24 = fontpool.find_font("font_light_24")
 # fontpool.add_font("font_thin_24", "fonts/Kanit-Thin-24.pcf")
 # font_thin_24 = fontpool.find_font("font_thin_24")
 # fontpool.add_font("font_light_18", "fonts/Kanit-Light-18.pcf")
-# font_light_18 = fontpool.find_font("font_lsmall_ight")
-# fontpool.add_font("font_thin_18", "fonts/Kanit-Thin-18.pcf")
-# font_thin_18 = fontpool.find_font("font_thin_18")
+font_light_18 = fontpool.find_font("font_lsmall_ight")
+fontpool.add_font("font_thin_18", "fonts/Kanit-Thin-18.pcf")
+font_thin_18 = fontpool.find_font("font_thin_18")
 # fontpool.add_font("font_light_14", "fonts/Kanit-Light-14.pcf")
 # font_light_14 = fontpool.find_font("font_lsmall_ight")
 # fontpool.add_font("font_thin_14", "fonts/Kanit-Thin-14.pcf")
 # font_thin_14 = fontpool.find_font("font_thin_14")
 # fontpool.add_font("font_light_12", "fonts/Kanit-Light-12.pcf")
 # font_light_12 = fontpool.find_font("font_lsmall_ight")
-fontpool.add_font("font_thin_12", "fonts/Kanit-Thin-12.pcf")
-font_thin_12 = fontpool.find_font("font_thin_12")
+# fontpool.add_font("font_thin_12", "fonts/Kanit-Thin-12.pcf")
+# font_thin_12 = fontpool.find_font("font_thin_12")
 # fontpool.add_font("font_light_10", "fonts/Kanit-Light-10.pcf")
 # font_light_10 = fontpool.find_font("font_lsmall_ight")
-fontpool.add_font("font_thin_10", "fonts/Kanit-Thin-10.pcf")
-font_thin_10 = fontpool.find_font("font_thin_10")
+# fontpool.add_font("font_thin_10", "fonts/Kanit-Thin-10.pcf")
+# font_thin_10 = fontpool.find_font("font_thin_10")
 
 io_connected = False
 try:
@@ -58,8 +58,8 @@ except ValueError:
 
 def get_text_message(text):
     messageboard.set_background(0x000000)
-    message = Message(font_thin_12, mask_color=0xFF00FF, opacity=1)
-    message.add_text(text, color=0xFFFFFF, x_offset=4, y_offset=8)
+    message = Message(font_thin_18, mask_color=0xFF00FF, opacity=1)
+    message.add_text(text, color=0xFFFFFF, x_offset=4, y_offset=0)
     return message
 
 async def sleep_and_check(button_definition, duration, start_time=None):
