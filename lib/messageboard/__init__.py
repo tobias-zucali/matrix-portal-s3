@@ -32,7 +32,6 @@ class MessageBoard:
         if isinstance(file_or_color, str):  # its a filenme:
             background, bg_shader = adafruit_imageload.load(file_or_color)
             self._dbl_buf.shader = bg_shader
-            self._background = background
         elif isinstance(file_or_color, int):
             # Make a background color fill
             bg_shader = displayio.ColorConverter(
@@ -43,9 +42,44 @@ class MessageBoard:
             )
             background.fill(displayio.ColorConverter().convert(file_or_color))
             self._dbl_buf.shader = bg_shader
-            self._background = background
         else:
             raise RuntimeError("Unknown type of background")
+        self._background = background
+        self._background_backup = background
+    
+    def set_progress(self, progress, color=0xFFFFFF):
+        """Show a split line on top of the screen
+        :param float progress: 0-1
+        """
+        progress = max(0, progress)
+        progress = min(1, progress)
+        new_background = displayio.Bitmap(
+            self.display.width, self.display.height, 65535
+        )
+        background_overlay = displayio.Bitmap(
+            self.display.width, 1, 65535
+        )
+        background_overlay.fill(displayio.ColorConverter().convert(color))
+
+        bar_width = int(self.display.width * progress)
+        bitmaptools.blit(
+            new_background,
+            self._background_backup,
+            0,
+            0,
+        )
+        bitmaptools.blit(
+            new_background,
+            background_overlay,
+            0,
+            0,
+            x1=0,
+            y1=0,
+            x2=bar_width,
+            y2=1,
+        )
+        # TODO: use an overlay image instead and blit in _draw
+        self._background = new_background
 
     async def animate(self, message, animation_class, animation_function, **kwargs):
         if self._animation:
@@ -59,7 +93,7 @@ class MessageBoard:
         anim_class = getattr(anim_class, animation_class.lower())
         anim_class = getattr(anim_class, animation_class)
         animation = anim_class(
-            self.display, self._draw, self._position, (self._shift_count_x, self._shift_count_y)
+            self.display, self._draw, self.set_progress, self._position, (self._shift_count_x, self._shift_count_y)
         )  # Instantiate the class
         self._animation = animation
 

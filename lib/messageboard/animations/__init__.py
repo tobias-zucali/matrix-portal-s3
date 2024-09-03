@@ -12,7 +12,7 @@ class AnimationCancelled(Exception):
 class Animation:
     _cancelled = False
 
-    def __init__(self, display, draw_callback, starting_position=(0, 0), shift_count=(0, 0)):
+    def __init__(self, display, draw_callback, set_progress_callback, starting_position=(0, 0), shift_count=(0, 0)):
         self._display = display
         starting_position = (
             starting_position[0] - shift_count[0] * self._display.width,
@@ -20,6 +20,7 @@ class Animation:
         )
         self._position = starting_position
         self._draw = draw_callback
+        self._set_progress = set_progress_callback
     
     def cancel(self):
         self._cancelled = True

@@ -2,8 +2,9 @@
 #
 # SPDX-License-Identifier: MIT
 
+import asyncio
 import time
-from . import Animation
+from . import Animation, AnimationCancelled
 
 
 class Static(Animation):
@@ -17,6 +18,30 @@ class Static(Animation):
         x, y = self._position
         self._draw(message, x, y)
         await self._wait(start_time, duration)
+
+    async def show_with_progress(self, message, duration=0, color=None):
+        """Show the message at its current position.
+
+        :param message: The message to show.
+        :type message: Message
+        """
+        start_time = time.monotonic()
+        elapsed_time = 0
+        x, y = self._position
+
+        if color is None:
+            color = 0xFFFFFF
+        
+        # TODO: use this._wait with a callback for setting the progress instead to avoid repeated code
+        while True:
+            elapsed_time = time.monotonic() - start_time
+            await asyncio.sleep(0)
+            if self._cancelled:
+                raise AnimationCancelled()
+            self._set_progress(elapsed_time / duration, color)
+            self._draw(message, x, y)
+            if elapsed_time >= duration:
+                break
 
     async def hide(self, message, duration=0):
         """Hide the message at its current position.

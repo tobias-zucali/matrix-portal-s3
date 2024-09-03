@@ -78,6 +78,9 @@ async def reveal(message):
 async def show(message, duration=0):
     await messageboard.animate(message, "Static", "show", duration=duration)
 
+async def show_with_progress(message, duration=1, color=None):
+    await messageboard.animate(message, "Static", "show_with_progress", duration=duration, color=color)
+
 async def hide(message, duration=0):
     await messageboard.animate(message, "Static", "hide", duration=duration)
 
@@ -93,6 +96,7 @@ async def show_intro():
         message = Message(font_bold_24, mask_color=0xFF00FF, opacity=1)
         message.add_text("mkrz", color=0xFFFFFF, x_offset=4, y_offset=-9)
         message.add_image("images/mkrz_ship.bmp", x_offset=2, y_offset=6)
+
         await reveal(message)
         await show(message, duration=2)
         await blink(message)
@@ -132,14 +136,15 @@ async def check_timeouts(message, button_definition, start_time):
     error_timeout = button_definition.get("error_timeout", None)
     if error_timeout is not None:
         duration = max((start_time + error_timeout) - time.monotonic(), 0)
-        await show(
+        await show_with_progress(
             message,
-            duration=duration
+            duration=duration,
+            color=0xFF0000
         )
         await main_show(ERROR_TIMEOUT)
     elif intro_timeout is not None:
         duration = max((start_time + intro_timeout) - time.monotonic(), 0)
-        await show(
+        await show_with_progress(
             message,
             duration=duration
         )
