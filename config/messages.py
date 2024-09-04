@@ -50,8 +50,7 @@ BUTTONS = [
     },
     {
         "text": [
-            "A2 I am",
-            "and one more line",
+            "Make this planet great again?",
         ],
         "error_timeout": 20,
         "pin": 2, # A2
