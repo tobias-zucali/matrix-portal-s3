@@ -1,15 +1,9 @@
 from adafruit_matrixportal.matrix import Matrix
-from adafruit_mcp230xx.mcp23017 import MCP23017
-from config.messages import BUTTONS, ERROR_IO_DETACHED, INTRO, ERROR_TIMEOUT
-from digitalio import Direction, Pull
 from messageboard import MessageBoard
 from messageboard.animations import AnimationCancelled
 from messageboard.fontpool import FontPool
 from messageboard.message import Message
 import asyncio
-import board
-import busio
-import time
 
 # Setup Board
 matrix = Matrix(width=256, height=32, bit_depth=5)
@@ -20,57 +14,15 @@ fontpool.add_font("font_bold_24", "fonts/Kanit-Regular-24.pcf")
 font_bold_24 = fontpool.find_font("font_bold_24")
 fontpool.add_font("font_light_24", "fonts/Kanit-Light-24.pcf")
 font_light_24 = fontpool.find_font("font_light_24")
-# fontpool.add_font("font_thin_24", "fonts/Kanit-Thin-24.pcf")
-# font_thin_24 = fontpool.find_font("font_thin_24")
-# fontpool.add_font("font_light_18", "fonts/Kanit-Light-18.pcf")
 font_light_18 = fontpool.find_font("font_lsmall_ight")
 fontpool.add_font("font_thin_18", "fonts/Kanit-Thin-18.pcf")
 font_thin_18 = fontpool.find_font("font_thin_18")
-# fontpool.add_font("font_light_14", "fonts/Kanit-Light-14.pcf")
-# font_light_14 = fontpool.find_font("font_lsmall_ight")
-# fontpool.add_font("font_thin_14", "fonts/Kanit-Thin-14.pcf")
-# font_thin_14 = fontpool.find_font("font_thin_14")
-# fontpool.add_font("font_light_12", "fonts/Kanit-Light-12.pcf")
-# font_light_12 = fontpool.find_font("font_lsmall_ight")
-# fontpool.add_font("font_thin_12", "fonts/Kanit-Thin-12.pcf")
-# font_thin_12 = fontpool.find_font("font_thin_12")
-# fontpool.add_font("font_light_10", "fonts/Kanit-Light-10.pcf")
-# font_light_10 = fontpool.find_font("font_lsmall_ight")
-# fontpool.add_font("font_thin_10", "fonts/Kanit-Thin-10.pcf")
-# font_thin_10 = fontpool.find_font("font_thin_10")
-
-io_connected = False
-try:
-    # setup IO
-    i2c = busio.I2C(board.SCL, board.SDA)
-    mcp = MCP23017(i2c)
-
-    for button in BUTTONS:
-        button["io"] = mcp.get_pin(button["pin"])
-        button["io"].direction = Direction.INPUT
-        button["io"].pull = Pull.UP
-        button["value"] = button["io"].value
-        button["last_shown"] = 0
-        button["throttle"] = button.get("throttle", 1) # throttle executions 1 sec by default
-    io_connected = True
-except ValueError:
-    pass
 
 def get_text_message(text):
     messageboard.set_background(0x000000)
     message = Message(font_thin_18, mask_color=0xFF00FF, opacity=1)
     message.add_text(text, color=0xFFFFFF, x_offset=4, y_offset=0)
     return message
-
-async def sleep_and_check(button_definition, duration, start_time=None):
-    global next_button_definition
-    if start_time is None:
-        start_time = time.monotonic()
-    while time.monotonic() < (start_time + duration):
-        await asyncio.sleep(0)
-        if next_button_definition is not button_definition:
-            raise AnimationCancelled()
-    return time.monotonic()
 
 async def reveal(message):
     await messageboard.animate(message, "Reveal", "in_from_left", step_size=4)
@@ -90,104 +42,20 @@ async def blink(message):
 async def slide_top(message):
     await messageboard.animate(message, "Scroll", "out_to_top")
 
-async def show_intro():
+async def main():
     while True:
-        messageboard.set_background(0x000033)
-        message = Message(font_bold_24, mask_color=0xFF00FF, opacity=1)
-        message.add_text("mkrz", color=0xFFFFFF, x_offset=4, y_offset=-9)
-        message.add_image("images/mkrz_ship.bmp", x_offset=2, y_offset=6)
-
-        await reveal(message)
-        await show(message, duration=2)
+        messageboard.set_background(0x000000)
+        message = Message(font_bold_24, mask_color=0xFF00FF, opacity=0.35)
+        message.add_image("images/artmagazin_b.bmp", x_offset=0, y_offset=0)
+        # await show(message, duration=2)
+        # message = Message(font_bold_24, mask_color=0xFF00FF, opacity=0.5)
+        # message.add_image("images/kunstverein_b.bmp", x_offset=0, y_offset=0)
+        # await show(message, duration=2)
+        # message = Message(font_bold_24, mask_color=0xFF00FF, opacity=0.35)
+        # message.add_image("images/open_night_b.bmp", x_offset=0, y_offset=0)
+        # await show(message, duration=2)
         await blink(message)
 
-        for line in INTRO["lines"]:
-            message = get_text_message(line)
-            await reveal(message)
-            await show(message, duration=2)
-
-async def show_alert(button_definition):
-    start_time = time.monotonic()
-    messageboard.set_background(button_definition["background"])
-    message = Message(font_light_24, mask_color=0xFF00FF, opacity=1)
-    text_parts = button_definition["text"]
-    for i, text in enumerate(text_parts):
-        message.add_text(text, color=0xFFFFFF, x_offset=4, y_offset=-9)
-        await show(message, duration=0.5)
-        if i < len(text_parts) - 1:
-            await hide(message, duration=0.5)
-    await check_timeouts(message, button_definition, start_time)
-
-async def show_text(button_definition):
-    start_time = time.monotonic()
-
-    for i, line in enumerate(button_definition["text"]):
-        message = get_text_message(line)
-        if i == 0:
-            await blink(message)
-            await show(message, duration=2)
-        else:
-            await reveal(message)
-            await show(message, duration=1)
-    await check_timeouts(message, button_definition, start_time)
-
-async def check_timeouts(message, button_definition, start_time):
-    intro_timeout = button_definition.get("intro_timeout", None)
-    error_timeout = button_definition.get("error_timeout", None)
-    if error_timeout is not None:
-        duration = max((start_time + error_timeout) - time.monotonic(), 0)
-        await show_with_progress(
-            message,
-            duration=duration,
-            color=0xFF0000
-        )
-        await main_show(ERROR_TIMEOUT)
-    elif intro_timeout is not None:
-        duration = max((start_time + intro_timeout) - time.monotonic(), 0)
-        await show_with_progress(
-            message,
-            duration=duration
-        )
-        await main_show(None)
-
-async def main_show(button_definition):
-    if button_definition is None:
-        await show_intro()
-    else:
-        type = button_definition.get("type", None)
-        if type is "alert":
-            await show_alert(button_definition)
-        else:
-            await show_text(button_definition)
-
-next_button_definition = None
-
-def switch_button(button_definition):
-    global next_button_definition
-    next_button_definition = button_definition
-    raise AnimationCancelled(button_definition)
-
-# main coroutine
-async def main():
-    if not io_connected:
-        await show_alert(ERROR_IO_DETACHED)
-        while True:
-            pass
-
-    global next_button_definition
-    asyncio.create_task(main_show(next_button_definition))
-
-    while True:
-        for button in BUTTONS:
-            if button["io"].value != button["value"]:
-                button["value"] = button["io"].value
-
-                if button["last_shown"] + button["throttle"] < time.monotonic():
-                    button["last_shown"] = time.monotonic()
-                    switch_button(button)
-        await asyncio.sleep(0)
- 
-# run the asyncio program
 while True:
     try:
         asyncio.run(main())
